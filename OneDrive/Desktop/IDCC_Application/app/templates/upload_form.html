@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Document - PRATT{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Upload Requirement Document</h1>
+    <p>Upload a document in the special format (PDF, DOCX, or TXT) or an image containing requirements.</p>
+    
+    <h2 style="margin-top: 30px;">Upload Document (PDF/DOCX/TXT)</h2>
+    <form method="POST" action="/api/v1/upload/document" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file">Document File *</label>
+            <input type="file" id="file" name="file" accept=".pdf,.docx,.doc,.txt" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="project_name">Project Name *</label>
+            <input type="text" id="project_name" name="project_name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="business_owner">Business Owner *</label>
+            <input type="text" id="business_owner" name="business_owner" required>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Upload & Parse Document</button>
+    </form>
+</div>
+
+<div class="card" style="margin-top: 30px;">
+    <h2>Upload Image (OCR)</h2>
+    <p>Upload an image (JPG, PNG, etc.) containing requirements. The system will extract text using OCR.</p>
+    
+    <form method="POST" action="/api/v1/upload/image" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="image_file">Image File *</label>
+            <input type="file" id="image_file" name="file" accept="image/*" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="image_project_name">Project Name *</label>
+            <input type="text" id="image_project_name" name="project_name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="image_business_owner">Business Owner *</label>
+            <input type="text" id="image_business_owner" name="business_owner" required>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Upload & Process Image</button>
+    </form>
+</div>
+{% endblock %}
+
+

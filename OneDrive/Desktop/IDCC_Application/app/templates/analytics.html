@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - PRATT{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Analytics Dashboard</h1>
+    <p>Summary statistics and insights for all requirements.</p>
+</div>
+
+<div class="card">
+    <h2>Overview</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+        <div style="text-align: center; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+            <h3 style="font-size: 2em; color: #3498db;">{{ stats.total_requirements }}</h3>
+            <p>Total Requirements</p>
+        </div>
+        <div style="text-align: center; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+            <h3 style="font-size: 2em; color: #27ae60;">{{ stats.average_sub_requirements }}</h3>
+            <p>Avg Sub-Requirements</p>
+        </div>
+        <div style="text-align: center; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+            <h3 style="font-size: 2em; color: #f39c12;">{{ stats.average_checklist_items }}</h3>
+            <p>Avg Checklist Items</p>
+        </div>
+        <div style="text-align: center; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+            <h3 style="font-size: 2em; color: #e74c3c;">{{ stats.average_quality_score }}</h3>
+            <p>Avg Quality Score</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>By Priority</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Priority</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for priority, count in stats.by_priority.items() %}
+            <tr>
+                <td><span class="priority-{{ priority }}">{{ priority|title }}</span></td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>By Status</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for status, count in stats.by_status.items() %}
+            <tr>
+                <td><span class="status-badge status-{{ status }}">{{ status|replace('_', ' ')|title }}</span></td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>By Category</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category, count in stats.by_category.items() %}
+            <tr>
+                <td>{{ category }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+

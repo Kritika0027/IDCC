@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}New Requirement - PRATT{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Create New Requirement</h1>
+    <p>Fill out the form below to create a new requirement. The system will help you break it down into smaller steps.</p>
+    
+    <form method="POST" action="/requirements/new">
+        <div class="form-group">
+            <label for="project_name">Project / Application Name *</label>
+            <input type="text" id="project_name" name="project_name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="business_owner">Business Owner *</label>
+            <input type="text" id="business_owner" name="business_owner" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="business_unit">Business Unit / Team</label>
+            <input type="text" id="business_unit" name="business_unit">
+        </div>
+        
+        <div class="form-group">
+            <label for="title">Requirement Title *</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Requirement Description *</label>
+            <textarea id="description" name="description" required rows="6"></textarea>
+            <small>Provide a detailed description of the requirement (minimum 20 characters)</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="priority">Priority *</label>
+            <select id="priority" name="priority" required>
+                {% for p in priorities %}
+                <option value="{{ p }}">{{ p|title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="expected_outcome">Expected Outcome / Success Criteria</label>
+            <textarea id="expected_outcome" name="expected_outcome" rows="4"></textarea>
+            <small>Describe what success looks like for this requirement</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="success_criteria">Success Criteria</label>
+            <textarea id="success_criteria" name="success_criteria" rows="4"></textarea>
+            <small>Specific, measurable criteria for success</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="constraints">Constraints</label>
+            <textarea id="constraints" name="constraints" rows="3"></textarea>
+            <small>Time, cost, tools, compliance, or other constraints</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="dependencies">Dependencies</label>
+            <textarea id="dependencies" name="dependencies" rows="3"></textarea>
+            <small>Other requirements or systems this depends on</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="desired_deadline">Desired Deadline</label>
+            <input type="datetime-local" id="desired_deadline" name="desired_deadline">
+        </div>
+        
+        <div class="form-group">
+            <label for="category">Category / Tags</label>
+            <input type="text" id="category" name="category" placeholder="e.g., performance, security, UI, backend">
+        </div>
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Create Requirement</button>
+            <a href="/" class="btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+

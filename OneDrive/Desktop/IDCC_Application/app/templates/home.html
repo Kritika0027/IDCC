@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>Requirements</h1>
+    <a href="/requirements/new" class="btn">Create New Requirement</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Project</th>
+                <th>Business Owner</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Quality Score</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for req in requirements %}
+            <tr>
+                <td>{{ req.id }}</td>
+                <td><a href="/requirements/{{ req.id }}">{{ req.title }}</a></td>
+                <td>{{ req.project_name }}</td>
+                <td>{{ req.business_owner }}</td>
+                <td>
+                    <span class="priority-{{ req.priority.value }}">
+                        {{ req.priority.value|title }}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge status-{{ req.status.value }}">
+                        {{ req.status.value|replace('_', ' ')|title }}
+                    </span>
+                </td>
+                <td>
+                    {% if req.quality_score %}
+                        {{ req.quality_score }}/100
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/requirements/{{ req.id }}" class="btn">View</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 40px;">
+                    No requirements found. <a href="/requirements/new">Create your first requirement</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+

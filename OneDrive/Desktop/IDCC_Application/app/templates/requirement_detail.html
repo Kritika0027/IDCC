@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ requirement.title }} - PRATT{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>{{ requirement.title }}</h1>
+        <div>
+            <a href="/requirements/new" class="btn">New Requirement</a>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <span class="priority-{{ requirement.priority.value }}">{{ requirement.priority.value|title }}</span>
+        <span class="status-badge status-{{ requirement.status.value }}" style="margin-left: 10px;">
+            {{ requirement.status.value|replace('_', ' ')|title }}
+        </span>
+        {% if requirement.quality_score %}
+        <span style="margin-left: 10px; font-weight: bold;">
+            Quality Score: {{ requirement.quality_score }}/100
+        </span>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <p><strong>Project:</strong> {{ requirement.project_name }}</p>
+        <p><strong>Business Owner:</strong> {{ requirement.business_owner }}</p>
+        {% if requirement.business_unit %}
+        <p><strong>Business Unit:</strong> {{ requirement.business_unit }}</p>
+        {% endif %}
+        {% if requirement.category %}
+        <p><strong>Category:</strong> {{ requirement.category }}</p>
+        {% endif %}
+        {% if requirement.desired_deadline %}
+        <p><strong>Deadline:</strong> {{ requirement.desired_deadline.strftime('%Y-%m-%d %H:%M') if requirement.desired_deadline else 'N/A' }}</p>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <h3>Description</h3>
+        <p style="white-space: pre-wrap;">{{ requirement.description }}</p>
+    </div>
+    
+    {% if requirement.expected_outcome %}
+    <div style="margin-bottom: 20px;">
+        <h3>Expected Outcome</h3>
+        <p style="white-space: pre-wrap;">{{ requirement.expected_outcome }}</p>
+    </div>
+    {% endif %}
+    
+    {% if requirement.success_criteria %}
+    <div style="margin-bottom: 20px;">
+        <h3>Success Criteria</h3>
+        <p style="white-space: pre-wrap;">{{ requirement.success_criteria }}</p>
+    </div>
+    {% endif %}
+    
+    {% if requirement.constraints %}
+    <div style="margin-bottom: 20px;">
+        <h3>Constraints</h3>
+        <p style="white-space: pre-wrap;">{{ requirement.constraints }}</p>
+    </div>
+    {% endif %}
+    
+    {% if requirement.dependencies %}
+    <div style="margin-bottom: 20px;">
+        <h3>Dependencies</h3>
+        <p style="white-space: pre-wrap;">{{ requirement.dependencies }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Sub-Requirements</h2>
+    <a href="/requirements/{{ requirement.id }}/sub-requirements/new" class="btn">Add Sub-Requirement</a>
+    
+    {% if sub_requirements %}
+    <table style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub_req in sub_requirements %}
+            <tr>
+                <td>{{ sub_req.title }}</td>
+                <td>
+                    <span class="priority-{{ sub_req.priority.value }}">
+                        {{ sub_req.priority.value|title }}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge status-{{ sub_req.status.value }}">
+                        {{ sub_req.status.value|replace('_', ' ')|title }}
+                    </span>
+                </td>
+                <td>
+                    <a href="/requirements/{{ requirement.id }}" class="btn">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="margin-top: 20px; color: #666;">No sub-requirements yet. Break down this requirement into smaller steps.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Checklist</h2>
+    <form method="POST" action="/requirements/{{ requirement.id }}/checklist/new" style="margin-bottom: 20px;">
+        <div style="display: flex; gap: 10px;">
+            <input type="text" name="title" placeholder="Checklist item title" required style="flex: 1;">
+            <input type="number" name="order" value="0" style="width: 80px;">
+            <button type="submit" class="btn">Add Item</button>
+        </div>
+    </form>
+    
+    {% if checklist_items %}
+    <div>
+        {% for item in checklist_items %}
+        <div class="checklist-item {% if item.is_completed %}completed{% endif %}">
+            <form method="POST" action="/checklist/{{ item.id }}/toggle" style="display: inline;">
+                <input type="checkbox" {% if item.is_completed %}checked{% endif %} 
+                       onchange="this.form.submit()">
+            </form>
+            <div style="flex: 1;">
+                <strong>{{ item.title }}</strong>
+                {% if item.description %}
+                <p style="margin-top: 5px; color: #666;">{{ item.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: #666;">No checklist items yet. Add items to track progress.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Analytics & Suggestions</h2>
+    <a href="/api/v1/analytics/suggestions/{{ requirement.id }}" class="btn" target="_blank">Get Suggestions (API)</a>
+    <a href="/analytics" class="btn">View Analytics Dashboard</a>
+</div>
+{% endblock %}
+
+
